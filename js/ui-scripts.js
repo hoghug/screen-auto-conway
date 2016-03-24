@@ -58,7 +58,7 @@
           autoConway.checkNeighbors($(this));
         });
 
-        if(autoConway.curGenLive.join() == autoConway.nextGenLive.join() /*|| autoConway.loopCounter == 400*/) {
+        if(autoConway.curGenLive.join() == autoConway.nextGenLive.join() || autoConway.loopCounter == 2000) {
           autoConway.resetGame();
         }
 
