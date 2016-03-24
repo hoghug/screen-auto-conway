@@ -28,11 +28,13 @@ html, body, div, img, span, h1, h2, h3, h4, p, ol, ul, li {
 } 
 
 body {
+  font-family: 'Share Tech Mono';
   background-color: #FF6138;
   -webkit-animation: bg-fader 60s infinite;
 }
 
 .clear { clear: both; }
+.relative { position: relative; }
 
 .conway-cell {
   float:left;
@@ -42,14 +44,14 @@ body {
   border: 1px solid #CEDEF2;
   border-collapse: collapse;
   background-color: rgba(255,255,255,0.7);
-
 }
 
-.prev-live-cell {
-  background-color: rgba(255,255,255,0.4);
-}
+.prev-live-cell { background-color: rgba(255,255,255,0.4); }
+.live-cell { background-color: rgba(255,255,255,0.1); }
 
-.live-cell {
-  background-color: rgba(255,255,255,0.1) !important;
+#loop-counter {
+  color: white;
+  position: absolute;
+  font-size: 8em;
+  opacity: 0.5;
 }
-

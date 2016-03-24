@@ -3,6 +3,7 @@
 
     spaces: [],
     prevGenLive: [],
+    curGenLive: [],
     nextGenLive: [],
     gridCols: 25,
     gridRows: 44,
@@ -28,33 +29,36 @@
     },
 
     setLiveCells: function() {
+      $('#loop-counter').text(autoConway.loopCounter);
       $('.conway-cell').each(function() {
-        if(Math.random() <= 0.25) {
+        if(Math.random() <= 0.2) {
           $(this).addClass('live-cell');
         }
       })
-
-      setTimeout(function(){ autoConway.startGame(); }, 3000);
+      $('#loop-counter').text(0);
+      setTimeout(function(){ autoConway.runSimulator(); }, 3000);
     },
 
-    startGame: function() {
-      this.nextGenLive = [];
-      this.gridLoop();
-    },
-
-    gridLoop: function() {
+    runSimulator: function() {
       $('.conway-cell').each(function() {
         autoConway.checkNeighbors($(this));
       });
 
-      this.interval = setInterval(function(){
+      this.interval = setInterval(function(){      
+
+        if(autoConway.loopCounter > 0 && autoConway.prevGenLive.join() == autoConway.nextGenLive.join()) {
+          autoConway.resetGame();
+        }
+
+        autoConway.loopCounter += 1;
+        $('#loop-counter').text(autoConway.loopCounter);
+
         autoConway.nextGenLive = [];
         $('.conway-cell').each(function() {
           autoConway.checkNeighbors($(this));
         });
-        autoConway.loopCounter += 1;
 
-        if(autoConway.prevGenLive.join() == autoConway.nextGenLive.join() || autoConway.loopCounter == 300) {
+        if(autoConway.curGenLive.join() == autoConway.nextGenLive.join() /*|| autoConway.loopCounter == 400*/) {
           autoConway.resetGame();
         }
 
@@ -97,18 +101,18 @@
     },
 
     lastCellGenerationLoop: function() {
-      autoConway.prevGenLive = [];
+      autoConway.prevGenLive = autoConway.curGenLive;
+      autoConway.curGenLive = [];
       $('.prev-live-cell').each(function(){
         $(this).removeClass('prev-live-cell');
       });
 
       $('.live-cell').each(function(){
-        autoConway.prevGenLive.push($(this).data('cell'));
-        $(this).addClass('prev-live-cell');
-        $(this).removeClass('live-cell');
+        autoConway.curGenLive.push($(this).data('cell'));
+        $(this).addClass('prev-live-cell').removeClass('live-cell');
       });
       autoConway.nextGenLive.forEach(function(curCell) {
-        $('#cell-' + curCell).addClass('live-cell');
+        $('#cell-' + curCell).addClass('live-cell').removeClass('prev-live-cell');
       });
     },
 
@@ -117,11 +121,14 @@
       autoConway.interval = '';
       autoConway.loopCounter = 0;
       autoConway.prevGenLive = [];
+      autoConway.curGenLive = [];
       autoConway.nextGenLive = [];
-      $('.live-cell').removeClass('live-cell');
-      $('.prev-live-cell').removeClass('prev-live-cell');
 
-      autoConway.setLiveCells();
+      setTimeout(function(){
+        $('.live-cell').removeClass('live-cell');
+        $('.prev-live-cell').removeClass('prev-live-cell');
+        autoConway.setLiveCells();
+      }, 3000);
     }
 
   };
