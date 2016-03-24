@@ -35,32 +35,29 @@
           $(this).addClass('live-cell');
         }
       })
-      $('#loop-counter').text(0);
       setTimeout(function(){ autoConway.runSimulator(); }, 3000);
     },
 
     runSimulator: function() {
-      $('.conway-cell').each(function() {
-        autoConway.checkNeighbors($(this));
-      });
-
       this.interval = setInterval(function(){      
 
+        // repeating/sustainable patterns
         if(autoConway.loopCounter > 0 && autoConway.prevGenLive.join() == autoConway.nextGenLive.join()) {
           autoConway.resetGame();
         }
-
-        autoConway.loopCounter += 1;
-        $('#loop-counter').text(autoConway.loopCounter);
 
         autoConway.nextGenLive = [];
         $('.conway-cell').each(function() {
           autoConway.checkNeighbors($(this));
         });
 
+        // total decimation or reach loop limit
         if(autoConway.curGenLive.join() == autoConway.nextGenLive.join() || autoConway.loopCounter == 2000) {
           autoConway.resetGame();
         }
+
+        autoConway.loopCounter += 1;
+        $('#loop-counter').text(autoConway.loopCounter);
 
       }, 500);
     },
@@ -119,12 +116,12 @@
     resetGame: function() {
       clearInterval(autoConway.interval);
       autoConway.interval = '';
-      autoConway.loopCounter = 0;
       autoConway.prevGenLive = [];
       autoConway.curGenLive = [];
       autoConway.nextGenLive = [];
 
       setTimeout(function(){
+        autoConway.loopCounter = 0;
         $('.live-cell').removeClass('live-cell');
         $('.prev-live-cell').removeClass('prev-live-cell');
         autoConway.setLiveCells();
