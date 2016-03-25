@@ -2,6 +2,7 @@
   var autoConway = {
 
     spaces: [],
+    grandGenLive: [],
     prevGenLive: [],
     curGenLive: [],
     nextGenLive: [],
@@ -42,7 +43,7 @@
       this.interval = setInterval(function(){      
 
         // repeating/sustainable patterns
-        if(autoConway.loopCounter > 0 && autoConway.prevGenLive.join() == autoConway.nextGenLive.join()) {
+        if(autoConway.loopCounter > 0 && (autoConway.prevGenLive.join() == autoConway.nextGenLive.join() || autoConway.grandGenLive.join() == autoConway.nextGenLive.join())) {
           autoConway.resetGame();
         }
 
@@ -98,6 +99,9 @@
     },
 
     lastCellGenerationLoop: function() {
+      if(autoConway.loopCounter % 3 == 0) {
+        autoConway.grandGenLive = autoConway.curGenLive;
+      }
       autoConway.prevGenLive = autoConway.curGenLive;
       autoConway.curGenLive = [];
       $('.prev-live-cell').each(function(){
@@ -116,6 +120,7 @@
     resetGame: function() {
       clearInterval(autoConway.interval);
       autoConway.interval = '';
+      autoConway.grandGenLive = [];
       autoConway.prevGenLive = [];
       autoConway.curGenLive = [];
       autoConway.nextGenLive = [];
